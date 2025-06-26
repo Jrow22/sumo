@@ -1,0 +1,24 @@
+name: Deploy to Droplet
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: your.droplet.ip
+          username: root
+          key: ${{ secrets.ssh_key }}
+          script: |
+            cd /root/yourrepo
+            git pull
+            docker build -t sumo-websock .
+            docker stop sumo-websocket-container || true
+            docker rm sumo-websocket-container || true
+            docker run -d --name sumo-websocket-container -p 80:80 your-image-name
