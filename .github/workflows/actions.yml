@@ -11,7 +11,7 @@ jobs:
     environment: production
     steps:
       - name: Check SSH key secret
-          run:|
+        run: |
             if [ -z "${{ secrets.SSH_KEY }}" ]; then
               echo "SSH_KEY secret is missing!"
               exit 1
