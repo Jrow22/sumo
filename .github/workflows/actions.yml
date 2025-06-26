@@ -21,7 +21,7 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.IP }}
+          host: root@159.223.108.202
           username: root
           key: ${{ secrets.SSH_KEY }}
           script: |
