@@ -10,18 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: Check SSH key secret
-        run: |
-            if [ -z "${{ secrets.SSH_KEY }}" ]; then
-              echo "SSH_KEY secret is missing!"
-              exit 1
-            else
-              echo "SSH_KEY secret is set."
-            fi
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: root@159.223.108.202
+          host: 159.223.108.202
           username: root
           key: ${{ secrets.SSH_KEY }}
           script: |
