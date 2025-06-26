@@ -1,0 +1,95 @@
+from simulation import Simulation  # Assuming your class is in simulation.py
+import time
+import os
+import redis
+import json
+from dotenv import load_dotenv
+import gzip
+from datetime import datetime, timedelta
+import subprocess
+
+ROUTE_FILE = "data/generated_trips.trips.xml"
+ROUTE_GEN_INTERVAL_HOURS = 24
+
+ENV = os.getenv("ENV") or ("production" if "FLY_ALLOC_ID" in os.environ else "development")
+print(f"Running in {ENV} environment")
+
+if ENV == "development":
+    dotenv_path = f".env.{ENV}"
+    if os.path.exists(dotenv_path):
+        load_dotenv(dotenv_path)
+
+# Set SUMO_HOME to a sensible default if not already defined
+default_sumo_home = "/Library/Frameworks/EclipseSUMO.framework/Versions/1.23.1/EclipseSUMO" if ENV == "development" else "/usr/share/sumo"
+os.environ["SUMO_HOME"] = default_sumo_home
+
+# Set route file depending on environment
+ROUTE_FILE = "generated_trips.trips.xml" if ENV == "development" else "data/generated_trips.trips.xml"
+
+# 🔌 Connect to Redis
+redis_url = os.environ["REDIS_URL"]
+r = redis.from_url(redis_url, decode_responses=True)
+            
+'''sumo_process = subprocess.Popen([
+    "sumo",
+    "-c", "chicago.sumocfg",
+    "--start",
+    "--ignore-route-errors",
+    "--remote-port", "8813"
+])
+'''
+def route_file_old():
+    if not os.path.exists(ROUTE_FILE):
+        return True
+    modified = datetime.fromtimestamp(os.path.getmtime(ROUTE_FILE))
+    return datetime.now() - modified > timedelta(hours=ROUTE_GEN_INTERVAL_HOURS)
+
+def compress_json_gzip(data):
+    json_string = json.dumps(data)
+    json_bytes = json_string.encode('utf-8')
+    return gzip.compress(json_bytes, compresslevel=9)
+
+def run_simulation():
+    # Path to your files
+    net_file = 'chicago_n.net.xml'
+    config_file = "chicago.sumocfg"
+    
+    # Start SUMO GUI
+    sumo_cmd = ["sumo", "-c", config_file, "--start", "--ignore-route-errors"]
+
+    #Create simulation object
+    #sim = Simulation(net_file, sumo_gui_cmd)
+    sim = Simulation(net_file, sumo_cmd)
+     
+    try:
+        while True:
+            sim.start_simulation()
+            if route_file_old() and sim.traci.isLoaded():
+                print("Route file is old, generating new route file")
+                routes = sim.create_routes()
+                sim.generate_trips_file(routes)
+            else:
+                print("Route file is up to date, using existing route file")
+            while True:
+                sim_state = r.get("sim_control")
+                if sim_state != "start":
+                    print("No WebSocket clients connected — pausing simulation")
+                    time.sleep(1)
+                    continue
+
+                if sim.traci.simulation.getMinExpectedNumber() <= 0:
+                    print("Simulation finished")
+                    break
+                
+                positions = sim.run_step()
+                compressed_data = compress_json_gzip(positions)
+                r.publish("positions", compressed_data)
+                time.sleep(0.1)
+            sim.stop_simulation()
+    except Exception as e:
+        print("Simulation failed:", e)
+        sim.stop_simulation()
+        return
+
+if __name__ == "__main__":
+    run_simulation()
