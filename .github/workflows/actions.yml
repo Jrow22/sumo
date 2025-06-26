@@ -8,11 +8,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: root@159.223.108.202
+          host: ${{ secrets.IP }}
           username: root
           key: ${{ secrets.SSH_KEY }}
           script: |
