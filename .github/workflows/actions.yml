@@ -12,9 +12,9 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: your.droplet.ip
+          host: root@159.223.108.202
           username: root
-          key: ${{ secrets.ssh_key }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
             cd /root/yourrepo
             git pull
