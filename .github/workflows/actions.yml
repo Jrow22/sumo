@@ -17,7 +17,7 @@ jobs:
           username: root
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /root/yourrepo
+            cd /root/sumo
             git pull
             docker build -t sumo-websock .
             docker stop sumo-websocket-container || true
