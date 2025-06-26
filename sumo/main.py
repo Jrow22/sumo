@@ -11,20 +11,12 @@ import subprocess
 ROUTE_FILE = "data/generated_trips.trips.xml"
 ROUTE_GEN_INTERVAL_HOURS = 24
 
-ENV = os.getenv("ENV") or ("production" if "FLY_ALLOC_ID" in os.environ else "development")
-print(f"Running in {ENV} environment")
-
-if ENV == "development":
-    dotenv_path = f".env.{ENV}"
-    if os.path.exists(dotenv_path):
-        load_dotenv(dotenv_path)
-
 # Set SUMO_HOME to a sensible default if not already defined
-default_sumo_home = "/Library/Frameworks/EclipseSUMO.framework/Versions/1.23.1/EclipseSUMO" if ENV == "development" else "/usr/share/sumo"
+default_sumo_home = "/usr/share/sumo"
 os.environ["SUMO_HOME"] = default_sumo_home
 
 # Set route file depending on environment
-ROUTE_FILE = "generated_trips.trips.xml" if ENV == "development" else "data/generated_trips.trips.xml"
+ROUTE_FILE = "generated_trips.trips.xml"
 
 # 🔌 Connect to Redis
 redis_url = os.environ["REDIS_URL"]

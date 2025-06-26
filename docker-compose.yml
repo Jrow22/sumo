@@ -1,0 +1,41 @@
+
+services:
+  sumo:
+    build:
+      context: ./sumo
+      dockerfile: Dockerfile
+    container_name: sumo-simulation
+    depends_on:
+      - redis
+    networks:
+      - simnet
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  websocket:
+    build:
+      context: ./websocket
+      dockerfile: Dockerfile
+    container_name: sumo-websocket
+    ports:
+      - "80:80"  # or your WebSocket port
+    depends_on:
+      - redis
+      - sumo
+    networks:
+      - simnet
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  redis:
+    image: redis:7
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    networks:
+      - simnet
+
+networks:
+  simnet:
