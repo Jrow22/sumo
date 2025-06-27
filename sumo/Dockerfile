@@ -2,9 +2,14 @@ FROM ubuntu:22.04
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
-    python3 python3-pip \
-    sumo sumo-tools \
+    git cmake g++ libxerces-c-dev libfox-1.6-dev libgdal-dev libproj-dev python3 python3-pip \
     && apt-get clean
+
+RUN git clone https://github.com/eclipse/sumo.git /sumo-src && \
+    cd /sumo-src && \
+    git checkout v1_18_0 && \
+    mkdir build && cd build && \
+    cmake .. && make -j$(nproc) && make install
 
 ENV SUMO_HOME=/usr/share/sumo
 
