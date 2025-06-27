@@ -2,7 +2,7 @@ import asyncio
 from aiohttp import web, WSMsgType
 import redis.asyncio as aioredis
 
-redis = aioredis.from_url("redis://localhost:6379", decode_responses=False)
+redis = aioredis.from_url("redis://redis:6379", decode_responses=False)
 
 clients = set()
 redis_listener_task = None
