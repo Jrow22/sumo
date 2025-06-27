@@ -25,7 +25,7 @@ services:
         #condition: none
         condition: any
     labels:
-      - "com.example.redeploy=2"
+      - "com.example.redeploy=3"
 
   redis:
     image: redis:7
