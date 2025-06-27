@@ -22,4 +22,5 @@ jobs:
             docker build -t jamrow/sumo:latest ./sumo
             docker push jamrow/websocket:latest
             docker push jamrow/sumo:latest
+            docker system prune
             docker stack deploy -c docker-compose.yml sumo_stack
