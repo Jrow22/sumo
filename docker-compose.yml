@@ -1,7 +1,7 @@
 
 services:
   sumo:
-    image: jamrow/sumo:latest
+    image: jamrow/sumo:${IMAGE_TAG:-latest}
     depends_on:
       - redis
     networks:
@@ -15,7 +15,7 @@ services:
         condition: none
 
   websocket:
-    image: jamrow/websocket:latest
+    image: jamrow/websocket:${IMAGE_TAG:-latest}
     ports:
       - "8000:8000"
     depends_on:

@@ -19,9 +19,12 @@ jobs:
             cd /root/sumo
             git pull
             git lfs pull
-            docker build -t jamrow/websocket:latest ./websocket
-            docker build -t jamrow/sumo:latest ./sumo
+            GIT_COMMIT=$(git rev-parse --short HEAD)
+            docker build -t jamrow/websocket:${GIT_COMMIT} -t jamrow/websocket:latest ./websocket
+            docker build -t jamrow/sumo:${GIT_COMMIT} -t jamrow/sumo:latest ./sumo
+            docker push jamrow/websocket:${GIT_COMMIT}
             docker push jamrow/websocket:latest
+            docker push jamrow/sumo:${GIT_COMMIT}
             docker push jamrow/sumo:latest
-            docker system prune
-            docker stack deploy -c docker-compose.yml sumo_stack
+            docker system prune -f
+            IMAGE_TAG=${GIT_COMMIT} docker stack deploy -c docker-compose.yml sumo_stack
