@@ -53,7 +53,7 @@ def run_simulation():
     #sim = Simulation(net_file, sumo_gui_cmd)
     sim = Simulation(net_file, sumo_cmd)
      
-    try:
+    '''try:
         while True:
             sim.start_simulation()
             if route_file_old() and sim.traci.isLoaded():
@@ -81,7 +81,7 @@ def run_simulation():
     except Exception as e:
         print("Simulation failed:", e)
         sim.stop_simulation()
-        return
+        return'''
 
 if __name__ == "__main__":
     run_simulation()
