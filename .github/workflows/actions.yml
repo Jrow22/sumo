@@ -18,7 +18,6 @@ jobs:
           script: |
             cd /root/sumo
             git pull
-            docker build -t sumo-websock .
-            docker stop sumo-websocket-container || true
-            docker rm sumo-websocket-container || true
-            docker run -d --name sumo-websocket-container -p 80:80 sumo-websock
+            docker build -t jamrow/websocket:latest ./websocket
+            docker build -t jamrow/sumo:latest ./sumo
+            docker stack deploy -c docker-compose.yml sumo_stack
