@@ -19,9 +19,10 @@ services:
       - sumo
     networks:
       - simnet
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
 
   redis:
     image: redis:7
@@ -32,3 +33,4 @@ services:
 
 networks:
   simnet:
+  
