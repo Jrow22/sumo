@@ -22,7 +22,8 @@ services:
     deploy:
       replicas: 1
       restart_policy:
-        condition: none
+        #condition: none
+        condition: any
     labels:
       - "com.example.redeploy=1"
 
@@ -32,6 +33,19 @@ services:
       - "6379:6379"
     networks:
       - simnet
+
+  websocket_tester:
+    image: alpine/git # A small image that we can install wscat into
+    command: sh -c "apk add --no-cache nodejs npm && npm install -g wscat && sleep infinity"
+    networks:
+      - simnet # MUST be on the same network as 'websocket'
+    depends_on:
+      - websocket # Ensure websocket starts first
+    deploy:
+      replicas: 1 # Only need one tester instance
+      restart_policy:
+        condition: on_failure # Good default for a test utility
+        max_attempts: 3 # Try a few times
 
 networks:
   simnet:
