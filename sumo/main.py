@@ -51,7 +51,7 @@ def run_simulation():
 
     #Create simulation object
     #sim = Simulation(net_file, sumo_gui_cmd)
-    #sim = Simulation(net_file, sumo_cmd)
+    sim = Simulation(net_file, sumo_cmd)
     '''sim.start_simulation()
     print("Simulation started")
     if route_file_old() and sim.traci.isLoaded():

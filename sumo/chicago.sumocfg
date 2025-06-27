@@ -2,6 +2,7 @@
     <input>
         <net-file value="chicago_n.net.xml"/>
         <route-files value="random_trips.trips.xml,generated_trips.trips.xml"/>
+        <additional-files value="dummy_vtypes.add.xml"/>
     </input>
     <time>
         <begin value="0"/>
