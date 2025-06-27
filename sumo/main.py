@@ -52,7 +52,7 @@ def run_simulation():
     #Create simulation object
     #sim = Simulation(net_file, sumo_gui_cmd)
     sim = Simulation(net_file, sumo_cmd)
-     
+    print("Simulation started")
     '''try:
         while True:
             sim.start_simulation()
