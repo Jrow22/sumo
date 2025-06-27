@@ -19,7 +19,7 @@ os.environ["SUMO_HOME"] = default_sumo_home
 ROUTE_FILE = "generated_trips.trips.xml"
 
 # 🔌 Connect to Redis
-redis_url = os.environ["REDIS_URL"]
+redis_url = "redis://localhost:6379"
 r = redis.from_url(redis_url, decode_responses=True)
             
 '''sumo_process = subprocess.Popen([
