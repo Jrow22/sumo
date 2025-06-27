@@ -11,7 +11,7 @@ RUN git clone https://github.com/eclipse/sumo.git /sumo-src && \
     mkdir build && cd build && \
     cmake .. && make -j$(nproc) && make install
 
-ENV SUMO_HOME=/usr/share/sumo
+ENV SUMO_HOME=/usr/local/share/sumo
 
 WORKDIR /app
 
