@@ -1,16 +1,8 @@
 import asyncio
-import os
-from dotenv import load_dotenv
 from aiohttp import web, WSMsgType
 import redis.asyncio as aioredis
 
-# Load environment
-ENV = os.getenv("ENV") or ("production" if "FLY_ALLOC_ID" in os.environ else "development")
-if ENV == "development":
-    load_dotenv(f".env.{ENV}")
-
-REDIS_URL = os.environ["REDIS_URL"]
-redis = aioredis.from_url(REDIS_URL, decode_responses=False)
+redis = aioredis.from_url("redis://localhost:6379", decode_responses=False)
 
 clients = set()
 redis_listener_task = None
@@ -54,7 +46,6 @@ async def websocket_handler(request):
     try:
         async for msg in ws:
             if msg.type == WSMsgType.TEXT:
-                # No incoming message expected, but you can process if needed
                 pass
             elif msg.type == WSMsgType.ERROR:
                 print(f"WebSocket connection closed with exception {ws.exception()}")
@@ -88,7 +79,6 @@ async def main():
     await site.start()
 
     print("Server started on port 8000")
-    # Run forever
     while True:
         await asyncio.sleep(3600)
 
