@@ -9,6 +9,10 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
 
   websocket:
     image: jamrow/websocket:latest
