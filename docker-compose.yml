@@ -44,7 +44,7 @@ services:
     deploy:
       replicas: 1 # Only need one tester instance
       restart_policy:
-        condition: on_failure # Good default for a test utility
+        condition: any # Good default for a test utility
         max_attempts: 3 # Try a few times
 
 networks:
