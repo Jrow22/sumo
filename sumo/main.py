@@ -47,7 +47,7 @@ def run_simulation():
     config_file = "chicago.sumocfg"
     
     # Start SUMO GUI
-    sumo_cmd = ["sumo", "-c", config_file, "--start", "--ignore-route-errors"]
+    sumo_cmd = ["sumo", "-c", config_file, "--start", "--ignore-route-errors", "--verbose"]
 
     #Create simulation object
     #sim = Simulation(net_file, sumo_gui_cmd)
