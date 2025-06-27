@@ -21,3 +21,5 @@ jobs:
             docker build -t jamrow/websocket:latest ./websocket
             docker build -t jamrow/sumo:latest ./sumo
             docker stack deploy -c docker-compose.yml sumo_stack
+            docker service update --force sumo_stack_sumo
+            docker service update --force sumo_stack_websocket
