@@ -12,12 +12,13 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: 159.223.108.202
+          host: ${{ secrets.IP }}
           username: root
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /root/sumo
             git pull
+            git lfs pull
             docker build -t jamrow/websocket:latest ./websocket
             docker build -t jamrow/sumo:latest ./sumo
             docker push jamrow/websocket:latest
