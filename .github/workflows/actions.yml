@@ -16,13 +16,15 @@ jobs:
           username: root
           key: ${{ secrets.SSH_KEY }}
           script: |
-            script: |
-              GIT_COMMIT=$(git rev-parse --short HEAD)
-              docker build -t jamrow/websocket:${GIT_COMMIT} -t jamrow/websocket:latest ./websocket
-              docker build -t jamrow/sumo:${GIT_COMMIT} -t jamrow/sumo:latest ./sumo
-              docker push jamrow/websocket:${GIT_COMMIT} # <-- Pushing the commit tag
-              docker push jamrow/websocket:latest
-              docker push jamrow/sumo:${GIT_COMMIT} # <-- Pushing the commit tag
-              docker push jamrow/sumo:latest
-              # ...
-              IMAGE_TAG=${GIT_COMMIT} docker stack deploy -c docker-compose.yml sumo_stack
+            cd /root/sumo
+            git pull
+            git lfs pull
+            GIT_COMMIT=$(git rev-parse --short HEAD)
+            docker build -t jamrow/websocket:${GIT_COMMIT} -t jamrow/websocket:latest ./websocket
+            docker build -t jamrow/sumo:${GIT_COMMIT} -t jamrow/sumo:latest ./sumo
+            docker push jamrow/websocket:${GIT_COMMIT}
+            docker push jamrow/websocket:latest
+            docker push jamrow/sumo:${GIT_COMMIT}
+            docker push jamrow/sumo:latest
+            docker system prune -f
+            IMAGE_TAG=${GIT_COMMIT} docker stack deploy -c docker-compose.yml sumo_stack
