@@ -3,10 +3,8 @@ import time
 import os
 import redis
 import json
-from dotenv import load_dotenv
 import gzip
 from datetime import datetime, timedelta
-import subprocess
 
 ROUTE_FILE = "data/generated_trips.trips.xml"
 ROUTE_GEN_INTERVAL_HOURS = 24
