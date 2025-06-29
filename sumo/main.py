@@ -50,23 +50,11 @@ def run_simulation():
     #Create simulation object
     #sim = Simulation(net_file, sumo_gui_cmd)
     sim = Simulation(net_file, sumo_cmd)
-    '''sim.start_simulation()
+    sim.start_simulation()
     print("Simulation started")
-    if route_file_old() and sim.traci.isLoaded():
-                print("Route file is old, generating new route file")
-                routes = sim.create_routes()
-                sim.generate_trips_file(routes)
-    else:
-        print("Route file is up to date, using existing route file")'''
-    '''try:
+    try:
         while True:
             sim.start_simulation()
-            if route_file_old() and sim.traci.isLoaded():
-                print("Route file is old, generating new route file")
-                routes = sim.create_routes()
-                sim.generate_trips_file(routes)
-            else:
-                print("Route file is up to date, using existing route file")
             while True:
                 sim_state = r.get("sim_control")
                 if sim_state != "start":
@@ -86,7 +74,7 @@ def run_simulation():
     except Exception as e:
         print("Simulation failed:", e)
         sim.stop_simulation()
-        return'''
+        return
 
 if __name__ == "__main__":
     run_simulation()
