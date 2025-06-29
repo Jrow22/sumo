@@ -6,9 +6,6 @@ import json
 import gzip
 from datetime import datetime, timedelta
 
-ROUTE_FILE = "data/generated_trips.trips.xml"
-ROUTE_GEN_INTERVAL_HOURS = 24
-
 # Set SUMO_HOME to a sensible default if not already defined
 default_sumo_home = "/usr/share/sumo"
 os.environ["SUMO_HOME"] = default_sumo_home
@@ -47,11 +44,8 @@ def run_simulation():
     # Start SUMO GUI
     sumo_cmd = ["sumo", "-c", config_file, "--start", "--ignore-route-errors", "--verbose"]
 
-    #Create simulation object
-    #sim = Simulation(net_file, sumo_gui_cmd)
     sim = Simulation(net_file, sumo_cmd)
-    sim.start_simulation()
-    print("Simulation started")
+
     try:
         while True:
             sim.start_simulation()
