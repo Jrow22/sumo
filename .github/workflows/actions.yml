@@ -8,7 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
-    timeout-minutes: 120
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
@@ -16,6 +15,7 @@ jobs:
           host: ${{ secrets.IP }}
           username: root
           key: ${{ secrets.SSH_KEY }}
+          timeout: 3600
           script: |
             cd /root/sumo
             git pull
