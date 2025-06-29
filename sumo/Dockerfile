@@ -1,5 +1,6 @@
+# Stage 1: Build SUMO
 FROM ubuntu:22.04 AS builder
-# Install dependencies
+
 RUN apt-get update && apt-get install -y \
     git cmake g++ libxerces-c-dev libfox-1.6-dev libgdal-dev libproj-dev python3 python3-pip \
     && apt-get clean
@@ -10,21 +11,27 @@ RUN git clone https://github.com/eclipse/sumo.git /sumo-src && \
     mkdir build && cd build && \
     cmake .. && make -j$(nproc) && make install
 
-FROM python:3.11-slim-buster
+# Stage 2: Runtime environment
+FROM ubuntu:22.04
 
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    python3 python3-pip libxerces-c3.2 libfox-1.6 libgdal30 libproj22 \
+    && apt-get clean
+
+# Copy SUMO binaries
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
+COPY --from=builder /usr/local/share/sumo /usr/local/share/sumo
+
+# Set up Python environment
 WORKDIR /app
-
-# Copy only requirements.txt first, so Docker caches this step unless requirements.txt changes
 COPY requirements.txt /app/
+RUN pip3 install -r requirements.txt
 
-COPY --from=builder /usr/local/bin/sumo /usr/local/bin/sumo
-COPY --from=builder /usr/local/bin/netconvert /usr/local/bin/netconvert
-
-RUN pip3 install -r requirements.txt  --verbose
-
-# Then copy the rest of your app code
+# Copy application code
 COPY . /app
 
+# Set SUMO_HOME for TraCI tools
 ENV SUMO_HOME=/usr/local/share/sumo
 
 CMD ["python3", "main.py"]
