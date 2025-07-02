@@ -25,11 +25,6 @@ r = redis.from_url(redis_url, decode_responses=True)
     "--remote-port", "8813"
 ])
 '''
-def route_file_old():
-    if not os.path.exists(ROUTE_FILE):
-        return True
-    modified = datetime.fromtimestamp(os.path.getmtime(ROUTE_FILE))
-    return datetime.now() - modified > timedelta(hours=ROUTE_GEN_INTERVAL_HOURS)
 
 def compress_json_gzip(data):
     json_string = json.dumps(data)
