@@ -9,6 +9,9 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     deploy:
+      placement:
+        constraints:
+          - node.hostname == ubuntu-s-1vcpu-1gb-nyc1-01
       replicas: 1
       restart_policy:
         condition: on-failure
