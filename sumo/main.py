@@ -49,22 +49,25 @@ def run_simulation():
     try:
         while True:
             sim.start_simulation()
-            while True:
-                sim_state = r.get("sim_control")
-                if sim_state != "start":
-                    print("No WebSocket clients connected — pausing simulation")
-                    time.sleep(1)
-                    continue
+            try:
+                while True:
+                    sim_state = r.get("sim_control")
+                    if sim_state != "start":
+                        print("No WebSocket clients connected — pausing simulation")
+                        time.sleep(1)
+                        continue
 
-                if sim.traci.simulation.getMinExpectedNumber() <= 0:
-                    print("Simulation finished")
-                    break
-                
-                positions = sim.run_step()
-                compressed_data = compress_json_gzip(positions)
-                r.publish("positions", compressed_data)
-                time.sleep(0.1)
-            sim.stop_simulation()
+                    if sim.traci.simulation.getMinExpectedNumber() <= 0:
+                        print("Simulation finished")
+                        break
+                    
+                    positions = sim.run_step()
+                    compressed_data = compress_json_gzip(positions)
+                    r.publish("positions", compressed_data)
+                    time.sleep(0.1)
+            finally:
+                sim.stop_simulation()
+                time.sleep(1)  # Add a small delay before attempting to restart
     except Exception as e:
         print("Simulation failed:", e)
         sim.stop_simulation()
