@@ -35,6 +35,8 @@ services:
         - "traefik.http.routers.sumo-https.tls.certresolver=cloudflare"
         - "traefik.http.routers.sumo-https.entrypoints=websecure"
         - "traefik.http.routers.sumo-https.rule=Host(`cars.shmaxes.com`)"
+        - "traefik.http.services.sumo.loadbalancer.server.port=8000"
+        - "traefik.http.services.sumo.loadbalancer.protocol=http"
 
   redis:
     image: redis:7
