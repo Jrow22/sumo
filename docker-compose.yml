@@ -29,8 +29,12 @@ services:
       replicas: 1
       restart_policy:
         condition: any
-    labels:
-      - "com.example.redeploy=5"
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.sumo-https.tls=true"
+        - "traefik.http.routers.sumo-https.tls.certresolver=cloudflare"
+        - "traefik.http.routers.sumo-https.entrypoints=websecure"
+        - "traefik.http.routers.sumo-https.rule=Host(`cars.shmaxes.com`)"
 
   redis:
     image: redis:7
