@@ -70,7 +70,7 @@ async def main():
     app = web.Application()
     app.add_routes([
         web.get('/health', health),
-        web.get('/ws', websocket_handler),  # WS endpoint at /ws
+        web.get('/', websocket_handler)
     ])
 
     runner = web.AppRunner(app)

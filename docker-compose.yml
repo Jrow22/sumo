@@ -30,9 +30,13 @@ services:
       restart_policy:
         condition: any
       labels:
-        - "traefik.http.routers.sumo-https.rule=Host(`cars.shmaxes.com/ws`)"
-        - "traefik.http.routers.sumo-https.service=websocket"
-        - "traefik.http.services.sumo-service.loadbalancer.server.port=8000"
+        - "traefik.enable=true"
+        - "traefik.http.routers.sumo-https.tls=true"
+        - "traefik.http.routers.sumo-https.tls.certresolver=cloudflare"
+        - "traefik.http.routers.sumo-https.service=sumo"
+        - "traefik.http.routers.sumo-https.entrypoints=websecure"
+        - "traefik.http.routers.sumo-https.rule=Host(`cars.shmaxes.com`)"
+        - "traefik.http.services.sumo.loadbalancer.server.port=8000"
 
   redis:
     image: redis:7
