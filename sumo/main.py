@@ -16,15 +16,6 @@ ROUTE_FILE = "generated_trips.trips.xml"
 # 🔌 Connect to Redis
 redis_url = "redis://redis:6379"
 r = redis.from_url(redis_url, decode_responses=True)
-            
-'''sumo_process = subprocess.Popen([
-    "sumo",
-    "-c", "chicago.sumocfg",
-    "--start",
-    "--ignore-route-errors",
-    "--remote-port", "8813"
-])
-'''
 
 def compress_json_gzip(data):
     json_string = json.dumps(data)
