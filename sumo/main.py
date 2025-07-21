@@ -4,7 +4,6 @@ import os
 import redis
 import json
 import gzip
-from datetime import datetime, timedelta
 
 # Set SUMO_HOME to a sensible default if not already defined
 default_sumo_home = "/usr/share/sumo"
@@ -15,6 +14,7 @@ ROUTE_FILE = "generated_trips.trips.xml"
 
 # 🔌 Connect to Redis
 redis_url = "redis://redis:6379"
+#redis_url = "redis://localhost:6379"
 r = redis.from_url(redis_url, decode_responses=True)
 
 def compress_json_gzip(data):
@@ -24,8 +24,8 @@ def compress_json_gzip(data):
 
 def run_simulation():
     # Path to your files
-    net_file = 'chicago_n.net.xml'
-    config_file = "chicago.sumocfg"
+    net_file = 'train-random.trips.xml'
+    config_file = "osm.sumocfg"
     
     # Start SUMO GUI
     sumo_cmd = ["sumo", "-c", config_file, "--start", "--ignore-route-errors", "--verbose"]

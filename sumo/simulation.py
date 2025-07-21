@@ -98,7 +98,7 @@ class Simulation:
     
     def run_step(self):
         traci.simulationStep()
-        positions = {"police": [], "vehicles": []}
+        positions = []
         for veh_id in traci.vehicle.getIDList():
             x, y = traci.vehicle.getPosition(veh_id)
             lon, lat = traci.simulation.convertGeo(x, y)
@@ -114,9 +114,11 @@ class Simulation:
                 position_data["description"] = traci.vehicle.getParameter(veh_id, "description")
                 position_data["block"] = traci.vehicle.getParameter(veh_id, "block")
                 position_data["arrest"] = traci.vehicle.getParameter(veh_id, "arrest")
-                positions["police"].append(position_data)
+                position_data["type"] = "police"
+                positions.append(position_data)
             else:
-                positions["vehicles"].append(position_data)
+                position_data["type"] = "car"
+                positions.append(position_data)
         return positions
     
     def run_simulation(self):

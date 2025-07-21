@@ -1,11 +1,26 @@
 import asyncio
 from aiohttp import web, WSMsgType
 import redis.asyncio as aioredis
+import gzip
+import json
 
-redis = aioredis.from_url("redis://redis:6379", decode_responses=False)
+REDIS_URL = "redis://redis:6379"
+#REDIS_URL = "redis://localhost:6379"
+redis = aioredis.from_url(REDIS_URL, decode_responses=False)
 
 clients = set()
 redis_listener_task = None
+def decompress_json_gzip(compressed_data):
+    decompressed_bytes = gzip.decompress(compressed_data)
+    json_string = decompressed_bytes.decode('utf-8')
+    data = json.loads(json_string)
+    return data
+
+def compress_json_gzip(data):
+    json_string = json.dumps(data)
+    json_bytes = json_string.encode('utf-8')
+    return gzip.compress(json_bytes, compresslevel=9)
+
 
 async def health(request):
     return web.Response(text="OK")

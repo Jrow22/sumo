@@ -1,0 +1,2 @@
+#!/bin/bash
+python "$SUMO_HOME/tools/randomTrips.py" -n osm.net.xml.gz --fringe-factor 40 --insertion-density 2 -o osm.rail.trips.xml -r osm.rail.rou.xml -b 0 -e 3600 --trip-attributes "departLane=\"best\"" --fringe-start-attributes "departSpeed=\"max\"" --validate --remove-loops --via-edge-types highway.motorway,highway.motorway_link,highway.trunk_link,highway.primary_link,highway.secondary_link,highway.tertiary_link --vehicle-class rail --vclass rail --prefix rail --min-distance 2400 --min-distance.fringe 10
