@@ -13,8 +13,8 @@ os.environ["SUMO_HOME"] = default_sumo_home
 ROUTE_FILE = "generated_trips.trips.xml"
 
 # 🔌 Connect to Redis
-redis_url = "redis://redis:6379"
-#redis_url = "redis://localhost:6379"
+#redis_url = "redis://redis:6379"
+redis_url = "redis://localhost:6379"
 r = redis.from_url(redis_url, decode_responses=True)
 
 def compress_json_gzip(data):
